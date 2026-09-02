@@ -1,5 +1,5 @@
 {
-  "homepage": "https://github.io/BriranSus/FITA_App_Prototype",
+  "homepage": "https://BriranSus.github.io/FITA_App_Prototype",
   "name": "fita",
   "private": true,
   "version": "0.0.0",
@@ -13,11 +13,13 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "lucide": "^1.39.0",
     "lucide-react": "^1.39.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

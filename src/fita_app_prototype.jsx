@@ -7,10 +7,9 @@ import {
   ScanLine, Sparkles, Check, AlertCircle, Info, ArrowRight, RotateCcw,
   Utensils, BookOpen, HeartPulse,
 } from "lucide-react";
-import "./FitaResponsive.css";
 
 // ===========================================================================
-// DESAIN TOKEN (Konsisten dengan prototype awal)
+// DESAIN TOKEN — Konsisten dengan prototype awal
 // ===========================================================================
 const INK = "#1E2B25";
 const TEAL = "#3B6357";
@@ -117,11 +116,11 @@ const STEPS_DATA = [
 ];
 
 // ===========================================================================
-// PLATE ILLUSTRATION (SVG asli)
+// PLATE ILLUSTRATION (SVG ASLI)
 // ===========================================================================
 function PlateIllustration({ showBoxes = false, detections = [] }) {
   return (
-    <svg viewBox="0 0 300 300" width="100%" height="100%" style={{ display: "block" }}>
+    <svg viewBox="0 0 300 300" width="100%" height="100%" className="block">
       <circle cx="150" cy="150" r="140" fill="#F0EBE0" stroke="#D8D0C0" strokeWidth="2" />
       <circle cx="150" cy="150" r="118" fill="#FCFAF5" />
       {/* ayam goreng */}
@@ -149,11 +148,11 @@ function PlateIllustration({ showBoxes = false, detections = [] }) {
 }
 
 // ===========================================================================
-// VIEW HP (DESAIN AWAL SEAMLESS TANPA BORDER)
+// 100% KOMPONEN ASLI AWAL (UNTUK VIEW HP — SEAMLESS TANPA BORDER)
 // ===========================================================================
 function MobileAppBar({ title, step, totalSteps }) {
   return (
-    <div style={{ padding: "16px 18px 12px", borderBottom: `1px solid ${LINE}`, background: "#fff", position: "sticky", top: 0, zIndex: 30 }}>
+    <div style={{ padding: "16px 18px 12px", borderBottom: `1px solid ${LINE}`, background: "#fff", position: "sticky", top: 0, zIndex: 20 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <div style={{ width: 26, height: 26, borderRadius: 6, background: TEAL, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Sparkles size={14} color="#fff" />
@@ -368,7 +367,7 @@ function MobileNutritionStep({ profile, onNext, gap, intake, target }) {
   );
 }
 
-function MobileRecommendationStep({ gap, onReset }) {
+function MobileRecommendationStep({ gap }) {
   const rec = useMemo(() => bestCombo(gap), [gap]);
   if (!rec) return <div style={{ padding: 18 }}>Tidak ada rekomendasi dalam batasan.</div>;
   const names = rec.ids.map((id) => FOODS.find((f) => f.id === id).name);
@@ -393,7 +392,7 @@ function MobileRecommendationStep({ gap, onReset }) {
         <div style={{ fontSize: 12, color: "#8A8272" }}>Kacang hijau + Bayam &middot; Rp4.000</div>
       </MobileCard>
       <div style={{ flex: 1, minHeight: 20 }} />
-      <MobilePrimaryButton onClick={onReset || (() => {})} icon={ArrowRight}>Simpan ke riwayat</MobilePrimaryButton>
+      <MobilePrimaryButton onClick={() => {}} icon={ArrowRight}>Simpan ke riwayat</MobilePrimaryButton>
     </div>
   );
 }
@@ -407,98 +406,97 @@ function ReasonRow({ icon: Icon, color, text }) {
   );
 }
 
-function MobileBottomNav({ setStep }) {
+function MobileBottomNav() {
   const items = [
-    { icon: Home, label: "Beranda", action: () => setStep(1) },
-    { icon: ScanLine, label: "Scan", active: true, action: () => setStep(2) },
-    { icon: History, label: "Riwayat", action: () => setStep(5) },
-    { icon: User, label: "Profil", action: () => setStep(1) },
+    { icon: Home, label: "Beranda" },
+    { icon: ScanLine, label: "Scan", active: true },
+    { icon: History, label: "Riwayat" },
+    { icon: User, label: "Profil" },
   ];
   return (
-    <div style={{ display: "flex", borderTop: `1px solid ${LINE}`, background: "#fff", padding: "8px 0 calc(10px + env(safe-area-inset-bottom, 0px))" }}>
+    <div style={{ display: "flex", borderTop: `1px solid ${LINE}`, background: "#fff", padding: "8px 0 10px", position: "sticky", bottom: 0, zIndex: 20 }}>
       {items.map((it) => (
-        <button
-          key={it.label}
-          type="button"
-          onClick={it.action}
-          style={{
-            flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3,
-            color: it.active ? ACCENT : "#B0A891", background: "none", border: "none", cursor: "pointer", padding: "2px 0",
-          }}
-        >
+        <div key={it.label} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, color: it.active ? ACCENT : "#B0A891" }}>
           <it.icon size={18} />
           <span style={{ fontSize: 9.5 }}>{it.label}</span>
-        </button>
+        </div>
       ))}
     </div>
   );
 }
 
 // ===========================================================================
-// VIEW PC (WEB DASHBOARD 2-KOLOM MODERN)
+// KOMPONEN DESKTOP DASHBOARD (UNTUK VIEW PC >= 768px via Tailwind md:)
 // ===========================================================================
 function DesktopProfileStep({ profile, setProfile }) {
   const currentBracket = ageToBracket(profile.age);
   const currentTarget = AKG_TABLE[currentBracket];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div style={{
-        background: "#EEF4F1", border: "1px solid rgba(59, 99, 87, 0.2)",
-        borderRadius: 12, padding: "12px 16px", display: "flex", gap: 10, alignItems: "center",
-      }}>
-        <Info size={18} color={TEAL} style={{ flexShrink: 0 }} />
-        <p style={{ fontSize: 13, color: INK, margin: 0, lineHeight: 1.5 }}>
+    <div className="flex flex-col gap-4">
+      <div className="bg-[#EEF4F1] border border-[#3B6357]/20 rounded-xl p-3.5 flex items-center gap-2.5 text-sm text-[#1E2B25]">
+        <Info size={18} className="text-[#3B6357] shrink-0" />
+        <p className="m-0 leading-relaxed">
           Data antropometri anak digunakan untuk menentukan <strong>Angka Kecukupan Gizi (AKG)</strong> acuan harian berdasarkan Permenkes RI No. 28/2019.
         </p>
       </div>
 
-      <div className="fita-profile-grid">
-        <DesktopField
-          label="Nama Lengkap Anak"
-          value={profile.name}
-          onChange={(v) => setProfile({ ...profile, name: v })}
-          placeholder="Contoh: Nadia Safira"
-        />
-        <DesktopField
-          label="Umur (Tahun)"
-          value={profile.age}
-          onChange={(v) => setProfile({ ...profile, age: v })}
-          placeholder="4"
-          type="number"
-        />
-        <DesktopField
-          label="Berat Badan (kg)"
-          value={profile.weight}
-          onChange={(v) => setProfile({ ...profile, weight: v })}
-          placeholder="14.5"
-          type="number"
-        />
-        <DesktopField
-          label="Tinggi Badan (cm)"
-          value={profile.height}
-          onChange={(v) => setProfile({ ...profile, height: v })}
-          placeholder="98"
-          type="number"
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <label className="block">
+          <span className="text-xs font-semibold text-[#6E6759] mb-1 block">Nama Lengkap Anak</span>
+          <input
+            type="text"
+            value={profile.name}
+            placeholder="Contoh: Nadia"
+            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-lg border border-[#E4DCCB] text-sm text-[#1E2B25] bg-white outline-none focus:border-[#3B6357]"
+          />
+        </label>
+        <label className="block">
+          <span className="text-xs font-semibold text-[#6E6759] mb-1 block">Umur (Tahun)</span>
+          <input
+            type="number"
+            value={profile.age}
+            placeholder="4"
+            onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-lg border border-[#E4DCCB] text-sm text-[#1E2B25] bg-white outline-none focus:border-[#3B6357]"
+          />
+        </label>
+        <label className="block">
+          <span className="text-xs font-semibold text-[#6E6759] mb-1 block">Berat Badan (kg)</span>
+          <input
+            type="number"
+            value={profile.weight}
+            placeholder="14.5"
+            onChange={(e) => setProfile({ ...profile, weight: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-lg border border-[#E4DCCB] text-sm text-[#1E2B25] bg-white outline-none focus:border-[#3B6357]"
+          />
+        </label>
+        <label className="block">
+          <span className="text-xs font-semibold text-[#6E6759] mb-1 block">Tinggi Badan (cm)</span>
+          <input
+            type="number"
+            value={profile.height}
+            placeholder="98"
+            onChange={(e) => setProfile({ ...profile, height: e.target.value })}
+            className="w-full px-3 py-2.5 rounded-lg border border-[#E4DCCB] text-sm text-[#1E2B25] bg-white outline-none focus:border-[#3B6357]"
+          />
+        </label>
       </div>
 
       <div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: "#6E6759", marginBottom: 6 }}>Jenis Kelamin</div>
-        <div style={{ display: "flex", gap: 10 }}>
+        <span className="text-xs font-semibold text-[#6E6759] mb-1.5 block">Jenis Kelamin</span>
+        <div className="flex gap-2.5">
           {["Laki-laki", "Perempuan"].map((g) => (
             <button
               key={g}
               type="button"
               onClick={() => setProfile({ ...profile, gender: g })}
-              style={{
-                flex: 1, padding: "11px 0", borderRadius: 8, fontSize: 13.5,
-                border: profile.gender === g ? `2px solid ${TEAL}` : `1px solid ${LINE}`,
-                background: profile.gender === g ? "#EEF4F1" : "#FFFFFF",
-                color: profile.gender === g ? TEAL : INK,
-                cursor: "pointer", fontWeight: profile.gender === g ? 700 : 500,
-                transition: "all 0.2s ease",
-              }}
+              className={`flex-1 py-2.5 rounded-lg text-sm transition-all cursor-pointer ${
+                profile.gender === g
+                  ? "border-2 border-[#3B6357] bg-[#EEF4F1] text-[#3B6357] font-bold"
+                  : "border border-[#E4DCCB] bg-white text-[#1E2B25] font-medium"
+              }`}
             >
               {g}
             </button>
@@ -506,32 +504,29 @@ function DesktopProfileStep({ profile, setProfile }) {
         </div>
       </div>
 
-      <div style={{
-        background: "#FAF7F0", border: `1px solid ${LINE}`,
-        borderRadius: 12, padding: "14px 16px", marginTop: 4,
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#7A7263" }}>Kategori Kelompok Usia:</span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: TEAL, background: "#EEF4F1", padding: "3px 8px", borderRadius: 6 }}>
+      <div className="bg-[#FAF7F0] border border-[#E4DCCB] rounded-xl p-3.5 mt-1">
+        <div className="flex justify-between items-center mb-2 text-xs">
+          <span className="font-semibold text-[#7A7263]">Kategori Kelompok Usia:</span>
+          <span className="font-bold text-[#3B6357] bg-[#EEF4F1] px-2 py-0.5 rounded">
             {currentBracket}
           </span>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
-          <div style={{ background: "#FFFFFF", padding: "8px 10px", borderRadius: 8, border: `1px solid ${LINE}` }}>
-            <div style={{ fontSize: 11, color: "#8A8272" }}>Zat Besi (Fe)</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: INK, marginTop: 2 }}>{currentTarget.fe} mg</div>
+        <div className="grid grid-cols-4 gap-2">
+          <div className="bg-white p-2 rounded-lg border border-[#E4DCCB]">
+            <div className="text-[11px] text-[#8A8272]">Zat Besi (Fe)</div>
+            <div className="text-sm font-bold text-[#1E2B25] mt-0.5">{currentTarget.fe} mg</div>
           </div>
-          <div style={{ background: "#FFFFFF", padding: "8px 10px", borderRadius: 8, border: `1px solid ${LINE}` }}>
-            <div style={{ fontSize: 11, color: "#8A8272" }}>Seng (Zn)</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: INK, marginTop: 2 }}>{currentTarget.zn} mg</div>
+          <div className="bg-white p-2 rounded-lg border border-[#E4DCCB]">
+            <div className="text-[11px] text-[#8A8272]">Seng (Zn)</div>
+            <div className="text-sm font-bold text-[#1E2B25] mt-0.5">{currentTarget.zn} mg</div>
           </div>
-          <div style={{ background: "#FFFFFF", padding: "8px 10px", borderRadius: 8, border: `1px solid ${LINE}` }}>
-            <div style={{ fontSize: 11, color: "#8A8272" }}>Vitamin C</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: INK, marginTop: 2 }}>{currentTarget.vitc} mg</div>
+          <div className="bg-white p-2 rounded-lg border border-[#E4DCCB]">
+            <div className="text-[11px] text-[#8A8272]">Vitamin C</div>
+            <div className="text-sm font-bold text-[#1E2B25] mt-0.5">{currentTarget.vitc} mg</div>
           </div>
-          <div style={{ background: "#FFFFFF", padding: "8px 10px", borderRadius: 8, border: `1px solid ${LINE}` }}>
-            <div style={{ fontSize: 11, color: "#8A8272" }}>Protein</div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: INK, marginTop: 2 }}>{currentTarget.protein} g</div>
+          <div className="bg-white p-2 rounded-lg border border-[#E4DCCB]">
+            <div className="text-[11px] text-[#8A8272]">Protein</div>
+            <div className="text-sm font-bold text-[#1E2B25] mt-0.5">{currentTarget.protein} g</div>
           </div>
         </div>
       </div>
@@ -539,102 +534,81 @@ function DesktopProfileStep({ profile, setProfile }) {
   );
 }
 
-function DesktopField({ label, value, onChange, placeholder, type = "text" }) {
-  return (
-    <label style={{ display: "block" }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: "#6E6759", marginBottom: 5 }}>{label}</div>
-      <input
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        style={{
-          width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8,
-          border: `1px solid ${LINE}`, fontSize: 14, outline: "none", color: INK,
-          background: "#FFFFFF",
-        }}
-      />
-    </label>
-  );
-}
-
 function DesktopScanStep({ scanned, setScanned }) {
   return (
-    <div className="fita-scan-layout">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="grid grid-cols-[320px_1fr] gap-7 items-center">
+      <div className="flex flex-col items-center">
         <div
           onClick={() => setScanned(true)}
-          style={{
-            width: "100%", maxWidth: 320, aspectRatio: "1", borderRadius: 16,
-            border: `2px dashed ${scanned ? TEAL : "#C2B8A3"}`,
-            background: scanned ? "#FFFFFF" : "#F7F2E8",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", position: "relative", overflow: "hidden",
-            boxShadow: scanned ? "0 8px 24px rgba(59,99,87,0.12)" : "none",
-          }}
+          className={`w-full max-w-[320px] aspect-square rounded-2xl border-2 border-dashed flex items-center justify-center cursor-pointer overflow-hidden transition-all ${
+            scanned ? "border-[#3B6357] bg-white shadow-md" : "border-[#C2B8A3] bg-[#F7F2E8]"
+          }`}
         >
           {scanned ? (
             <PlateIllustration />
           ) : (
-            <div style={{ textAlign: "center", color: "#8A8272", padding: 20 }}>
-              <div style={{
-                width: 54, height: 54, borderRadius: 14, background: "#EAE3D2",
-                display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 12,
-              }}>
-                <Camera size={26} color={INK} />
+            <div className="text-center text-[#8A8272] p-5">
+              <div className="w-14 h-14 rounded-2xl bg-[#EAE3D2] inline-flex items-center justify-center mb-3">
+                <Camera size={26} className="text-[#1E2B25]" />
               </div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: INK }}>Ambil Foto Piring</div>
-              <div style={{ fontSize: 12, color: "#807869", marginTop: 4 }}>
-                Ketuk di sini untuk simulasi jepretan kamera
-              </div>
+              <div className="text-sm font-bold text-[#1E2B25]">Ambil Foto Piring</div>
+              <div className="text-xs text-[#807869] mt-1">Ketuk di sini untuk simulasi jepretan kamera</div>
             </div>
           )}
         </div>
 
-        <div style={{ display: "flex", gap: 10, marginTop: 14, width: "100%", maxWidth: 320 }}>
-          <button type="button" onClick={() => setScanned(true)} className="fita-btn-secondary" style={{ flex: 1, padding: "10px 0" }}>
-            <Camera size={16} /> Kamera
+        <div className="flex gap-2.5 mt-3.5 w-full max-w-[320px]">
+          <button
+            type="button"
+            onClick={() => setScanned(true)}
+            className="flex-1 py-2.5 rounded-lg border border-[#E4DCCB] bg-white text-xs font-semibold text-[#1E2B25] flex items-center justify-center gap-1.5 hover:bg-[#FAF7F0] cursor-pointer"
+          >
+            <Camera size={15} /> Kamera
           </button>
-          <button type="button" onClick={() => setScanned(true)} className="fita-btn-secondary" style={{ flex: 1, padding: "10px 0" }}>
-            <Upload size={16} /> Galeri
+          <button
+            type="button"
+            onClick={() => setScanned(true)}
+            className="flex-1 py-2.5 rounded-lg border border-[#E4DCCB] bg-white text-xs font-semibold text-[#1E2B25] flex items-center justify-center gap-1.5 hover:bg-[#FAF7F0] cursor-pointer"
+          >
+            <Upload size={15} /> Galeri
           </button>
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ fontSize: 15, fontWeight: 700, color: INK }}>Panduan Pengambilan Foto Piring</div>
-        <p style={{ fontSize: 13, color: "#61594B", margin: 0, lineHeight: 1.6 }}>
+      <div className="flex flex-col gap-3">
+        <div className="text-base font-bold text-[#1E2B25]">Panduan Pengambilan Foto Piring</div>
+        <p className="text-sm text-[#61594B] m-0 leading-relaxed">
           Untuk memastikan model <strong>YOLOv8</strong> dapat mendeteksi jenis makanan dan mengestimasi porsi secara akurat, ikuti petunjuk berikut:
         </p>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <div style={{ width: 22, height: 22, borderRadius: "50%", background: TEAL, color: "#fff", fontSize: 11.5, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>1</div>
+        <div className="flex flex-col gap-2.5 mt-1">
+          <div className="flex gap-2.5 items-start">
+            <div className="w-5 h-5 rounded-full bg-[#3B6357] text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">1</div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: INK }}>Tampak Atas (Top-down View)</div>
-              <div style={{ fontSize: 11.5, color: "#787163", lineHeight: 1.4 }}>Arahkan kamera tegak lurus langsung di atas piring makan anak.</div>
+              <div className="text-sm font-semibold text-[#1E2B25]">Tampak Atas (Top-down View)</div>
+              <div className="text-xs text-[#787163]">Arahkan kamera tegak lurus langsung di atas piring makan anak.</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <div style={{ width: 22, height: 22, borderRadius: "50%", background: TEAL, color: "#fff", fontSize: 11.5, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>2</div>
+          <div className="flex gap-2.5 items-start">
+            <div className="w-5 h-5 rounded-full bg-[#3B6357] text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">2</div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: INK }}>Seluruh Tepian Piring Terlihat</div>
-              <div style={{ fontSize: 11.5, color: "#787163", lineHeight: 1.4 }}>Sistem memanfaatkan diameter fisik piring sebagai referensi kalibrasi gram porsi.</div>
+              <div className="text-sm font-semibold text-[#1E2B25]">Seluruh Tepian Piring Terlihat</div>
+              <div className="text-xs text-[#787163]">Sistem memanfaatkan diameter fisik piring sebagai referensi kalibrasi gram porsi.</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <div style={{ width: 22, height: 22, borderRadius: "50%", background: TEAL, color: "#fff", fontSize: 11.5, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>3</div>
+          <div className="flex gap-2.5 items-start">
+            <div className="w-5 h-5 rounded-full bg-[#3B6357] text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">3</div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: INK }}>Pencahayaan Jelas &amp; Tidak Silau</div>
-              <div style={{ fontSize: 11.5, color: "#787163", lineHeight: 1.4 }}>Hindari bayangan tebal agar warna dan tekstur lauk pauk terdeteksi optimal.</div>
+              <div className="text-sm font-semibold text-[#1E2B25]">Pencahayaan Jelas &amp; Tidak Silau</div>
+              <div className="text-xs text-[#787163]">Hindari bayangan tebal agar warna dan tekstur lauk pauk terdeteksi optimal.</div>
             </div>
           </div>
         </div>
 
         {scanned && (
-          <div style={{ background: "#EEF6F1", border: "1px solid rgba(63, 122, 87, 0.25)", borderRadius: 10, padding: "10px 14px", display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
-            <Check size={16} color={OK} />
-            <span style={{ fontSize: 12.5, color: OK, fontWeight: 600 }}>Foto piring berhasil dimuat. Siap diproses oleh model deteksi.</span>
+          <div className="bg-[#EEF6F1] border border-[#3F7A57]/25 rounded-xl p-2.5 flex items-center gap-2 text-xs font-semibold text-[#3F7A57] mt-2">
+            <Check size={16} />
+            <span>Foto piring berhasil dimuat. Siap diproses oleh model deteksi.</span>
           </div>
         )}
       </div>
@@ -644,40 +618,40 @@ function DesktopScanStep({ scanned, setScanned }) {
 
 function DesktopDetectionStep() {
   return (
-    <div className="fita-detection-layout">
+    <div className="grid grid-cols-[340px_1fr] gap-7 items-start">
       <div>
-        <div style={{ borderRadius: 16, overflow: "hidden", border: `1px solid ${LINE}`, background: "#FFFFFF", boxShadow: "0 4px 16px rgba(30,43,37,0.06)" }}>
+        <div className="rounded-2xl overflow-hidden border border-[#E4DCCB] bg-white shadow-sm">
           <PlateIllustration showBoxes detections={MOCK_DETECTIONS} />
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11.5, color: "#807869", marginTop: 8 }}>
+        <div className="flex items-center gap-1.5 text-xs text-[#807869] mt-2">
           <Info size={13} /> Output model YOLOv8 fine-tuned (Bounding Box &amp; Confidence Score).
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: 14.5, fontWeight: 700, color: INK }}>Komponen Pangan Teridentifikasi (3)</div>
-          <span style={{ fontSize: 11.5, color: TEAL, fontWeight: 600, background: "#EEF4F1", padding: "3px 8px", borderRadius: 6 }}>Kalibrasi Piring Aktif</span>
+      <div className="flex flex-col gap-2.5">
+        <div className="flex justify-between items-center">
+          <div className="text-sm font-bold text-[#1E2B25]">Komponen Pangan Teridentifikasi (3)</div>
+          <span className="text-xs font-semibold text-[#3B6357] bg-[#EEF4F1] px-2 py-0.5 rounded">Kalibrasi Piring Aktif</span>
         </div>
 
         {MOCK_DETECTIONS.map((d) => {
           const nutrisi = TKPI[d.label];
           const ratio = d.gram / nutrisi.per;
           return (
-            <div key={d.id} style={{ background: "#FFFFFF", border: `1px solid ${LINE}`, borderRadius: 12, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 8, borderLeft: `4px solid ${d.color}` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div key={d.id} className="bg-white border border-[#E4DCCB] rounded-xl p-3 flex flex-col gap-2" style={{ borderLeft: `4px solid ${d.color}` }}>
+              <div className="flex justify-between items-center">
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: INK }}>{d.label}</div>
-                  <div style={{ fontSize: 11.5, color: "#787163" }}>
+                  <div className="text-sm font-bold text-[#1E2B25]">{d.label}</div>
+                  <div className="text-xs text-[#787163]">
                     Estimasi Porsi: <strong>{d.gram} gram</strong> &middot; {Math.round(nutrisi.kcal * ratio)} kkal
                   </div>
                 </div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: d.color, background: `${d.color}15`, padding: "4px 8px", borderRadius: 6 }}>
+                <div className="text-xs font-bold px-2 py-0.5 rounded" style={{ color: d.color, background: `${d.color}15` }}>
                   {Math.round(d.confidence * 100)}% Cocok
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: 12, fontSize: 11, color: "#6A6253", borderTop: `1px dashed ${LINE}`, paddingTop: 6, marginTop: 2 }}>
+              <div className="flex gap-3 text-xs text-[#6A6253] border-t border-dashed border-[#E4DCCB] pt-1.5 mt-0.5">
                 <span>Protein: <strong>{(nutrisi.protein * ratio).toFixed(1)}g</strong></span>
                 <span>Zat Besi: <strong>{(nutrisi.fe * ratio).toFixed(1)}mg</strong></span>
                 <span>Seng: <strong>{(nutrisi.zn * ratio).toFixed(1)}mg</strong></span>
@@ -692,7 +666,7 @@ function DesktopDetectionStep() {
 }
 
 function DesktopNutritionStep({ profile, gap, intake, target }) {
-  const currentBracket = ageToBracket(profile.age);
+  const currentBracket = ageToBracket(Number(profile.age) || 4);
   const nutrientList = [
     { key: "fe", name: "Zat Besi (Fe)", unit: "mg", intake: intake.fe, target: target.fe },
     { key: "zn", name: "Seng (Zn)", unit: "mg", intake: intake.zn, target: target.zn },
@@ -708,20 +682,20 @@ function DesktopNutritionStep({ profile, gap, intake, target }) {
   }));
 
   return (
-    <div className="fita-nutrition-layout">
-      <div style={{ background: "#FAF5EA", border: `1px solid ${LINE}`, borderRadius: 12, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <div className="flex flex-col gap-5">
+      <div className="bg-[#FAF5EA] border border-[#E4DCCB] rounded-xl p-3.5 flex justify-between items-center">
         <div>
-          <div style={{ fontSize: 11.5, color: "#807869" }}>Standar Angka Kecukupan Gizi (AKG)</div>
-          <div style={{ fontSize: 14, fontWeight: 700, color: INK }}>Kelompok Usia {currentBracket} ({profile.gender})</div>
+          <div className="text-xs text-[#807869]">Standar Angka Kecukupan Gizi (AKG)</div>
+          <div className="text-sm font-bold text-[#1E2B25]">Kelompok Usia {currentBracket} &middot; {profile.gender}</div>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 11, color: "#807869" }}>Status Asupan Piring Ini:</div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: DANGER }}>Belum Memenuhi Target</div>
+        <div className="text-right">
+          <div className="text-xs text-[#807869]">Status Asupan Piring Ini:</div>
+          <div className="text-sm font-bold text-[#A34A3E]">Belum Memenuhi Target</div>
         </div>
       </div>
 
-      <div style={{ background: "#FFFFFF", border: `1px solid ${LINE}`, borderRadius: 14, padding: "16px 14px 10px" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: INK, marginBottom: 10 }}>Perbandingan Asupan Foto vs Target AKG Harian</div>
+      <div className="bg-white border border-[#E4DCCB] rounded-2xl p-4 pt-3">
+        <div className="text-sm font-bold text-[#1E2B25] mb-2">Perbandingan Asupan Foto vs Target AKG Harian</div>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={chartData} margin={{ top: 8, right: 12, left: -14, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#EDE8DC" />
@@ -737,27 +711,27 @@ function DesktopNutritionStep({ profile, gap, intake, target }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="fita-nutrient-cards-grid">
+      <div className="grid grid-cols-4 gap-3">
         {nutrientList.map((n) => {
           const tercukupi = n.intake >= n.target;
           const deficit = (n.target - n.intake).toFixed(1);
           const percent = Math.min(100, Math.round((n.intake / n.target) * 100));
           return (
-            <div key={n.key} style={{ background: "#FFFFFF", border: `1px solid ${LINE}`, borderRadius: 12, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 6 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: INK }}>{n.name}</span>
+            <div key={n.key} className="bg-white border border-[#E4DCCB] rounded-xl p-3 flex flex-col gap-1.5">
+              <div className="flex justify-between items-center text-xs font-bold text-[#1E2B25]">
+                <span>{n.name}</span>
                 {tercukupi ? (
-                  <span style={{ fontSize: 11, fontWeight: 700, color: OK, display: "flex", alignItems: "center", gap: 2 }}><Check size={12} /> Cukup</span>
+                  <span className="text-[#3F7A57] flex items-center gap-0.5"><Check size={12} /> Cukup</span>
                 ) : (
-                  <span style={{ fontSize: 11, fontWeight: 700, color: DANGER }}>-{deficit} {n.unit}</span>
+                  <span className="text-[#A34A3E]">-{deficit} {n.unit}</span>
                 )}
               </div>
-              <div style={{ width: "100%", height: 6, borderRadius: 3, background: "#EAE4D7", overflow: "hidden" }}>
-                <div style={{ width: `${percent}%`, height: "100%", background: tercukupi ? OK : DANGER, borderRadius: 3 }} />
+              <div className="w-full h-1.5 rounded bg-[#EAE4D7] overflow-hidden">
+                <div className="h-full rounded" style={{ width: `${percent}%`, background: tercukupi ? OK : DANGER }} />
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#807869" }}>
+              <div className="flex justify-between text-[11px] text-[#807869]">
                 <span>{n.intake} / {n.target} {n.unit}</span>
-                <span style={{ fontWeight: 600 }}>{percent}%</span>
+                <span className="font-semibold">{percent}%</span>
               </div>
             </div>
           );
@@ -769,89 +743,93 @@ function DesktopNutritionStep({ profile, gap, intake, target }) {
 
 function DesktopRecommendationStep({ gap, onReset }) {
   const rec = useMemo(() => bestCombo(gap), [gap]);
-  if (!rec) return <div style={{ padding: 18 }}>Tidak ada rekomendasi dalam batasan.</div>;
+  if (!rec) return <div className="p-4">Tidak ada rekomendasi dalam batasan.</div>;
 
   const names = rec.ids.map((id) => FOODS.find((f) => f.id === id).name);
   const coveredCount = Object.keys(WEIGHTS).filter((n) => rec.contrib[n] >= gap[n]).length;
 
   return (
-    <div className="fita-recommendation-layout">
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <div style={{ background: "linear-gradient(135deg, #3B6357 0%, #2A483F 100%)", color: "#FFFFFF", borderRadius: 16, padding: "18px 20px", boxShadow: "0 8px 24px rgba(42, 72, 63, 0.25)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, opacity: 0.9 }}>
-            <Sparkles size={14} color="#F2C17D" /> Rekomendasi Pangan Komplementer Terbaik
+    <div className="grid grid-cols-2 gap-6">
+      <div className="flex flex-col gap-3.5">
+        <div className="bg-gradient-to-br from-[#3B6357] to-[#2A483F] text-white rounded-2xl p-5 shadow-lg">
+          <div className="flex items-center gap-1.5 text-xs opacity-90">
+            <Sparkles size={14} className="text-[#F2C17D]" /> Rekomendasi Pangan Komplementer Terbaik
           </div>
-          <div style={{ fontSize: 20, fontWeight: 800, marginTop: 8, letterSpacing: "-0.3px" }}>
+          <div className="text-xl font-extrabold mt-2 tracking-tight">
             {names.join(" + ")}
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12, borderTop: "1px solid rgba(255,255,255,0.18)", paddingTop: 10 }}>
-            <div style={{ background: "rgba(255,255,255,0.15)", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
+          <div className="flex flex-wrap gap-2 mt-3 pt-2.5 border-t border-white/20 text-xs font-semibold">
+            <div className="bg-white/15 px-2.5 py-1 rounded-full">
               Estimasi Biaya: Rp{rec.contrib.cost.toLocaleString("id-ID")}
             </div>
-            <div style={{ background: "rgba(255,255,255,0.15)", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
+            <div className="bg-white/15 px-2.5 py-1 rounded-full">
               Menutup {coveredCount}/4 Gap Nutrien
             </div>
           </div>
         </div>
 
-        <div style={{ background: "#FFFFFF", border: `1px solid ${LINE}`, borderRadius: 14, padding: "16px 18px", display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: INK }}>Rasionalisasi Biokimia &amp; Gizi</div>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <div style={{ width: 26, height: 26, borderRadius: 6, background: `${ACCENT}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Sparkles size={14} color={ACCENT} />
+        <div className="bg-white border border-[#E4DCCB] rounded-2xl p-4 flex flex-col gap-2.5">
+          <div className="text-sm font-bold text-[#1E2B25]">Rasionalisasi Biokimia &amp; Gizi</div>
+          <div className="flex gap-2.5 items-start">
+            <div className="w-6 h-6 rounded bg-[#C97B2E]/15 flex items-center justify-center shrink-0">
+              <Sparkles size={14} className="text-[#C97B2E]" />
             </div>
             <div>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: INK }}>Bioavailabilitas Zat Besi Meningkat ×2.0</div>
-              <div style={{ fontSize: 11.5, color: "#61594B", lineHeight: 1.4, marginTop: 2 }}>Kandungan Vitamin C tinggi pada kombinasi ini mereduksi ion feri (Fe3+) menjadi fero (Fe2+) yang siap diserap tubuh anak.</div>
+              <div className="text-xs font-bold text-[#1E2B25]">Bioavailabilitas Zat Besi Meningkat ×2.0</div>
+              <div className="text-xs text-[#61594B] leading-relaxed mt-0.5">Kandungan Vitamin C tinggi pada kombinasi ini mereduksi ion feri (Fe3+) menjadi fero (Fe2+) yang siap diserap tubuh anak.</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <div style={{ width: 26, height: 26, borderRadius: 6, background: `${OK}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Check size={14} color={OK} />
+          <div className="flex gap-2.5 items-start">
+            <div className="w-6 h-6 rounded bg-[#3F7A57]/15 flex items-center justify-center shrink-0">
+              <Check size={14} className="text-[#3F7A57]" />
             </div>
             <div>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: INK }}>Penutupan Gap Ganda Sekaligus</div>
-              <div style={{ fontSize: 11.5, color: "#61594B", lineHeight: 1.4, marginTop: 2 }}>Kombinasi menutupi defisit zat besi dan seng secara bersamaan tanpa menimbulkan kompetisi absorbsi berlebih.</div>
+              <div className="text-xs font-bold text-[#1E2B25]">Penutupan Gap Ganda Sekaligus</div>
+              <div className="text-xs text-[#61594B] leading-relaxed mt-0.5">Kombinasi menutupi defisit zat besi dan seng secara bersamaan tanpa menimbulkan kompetisi absorbsi berlebih.</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <div style={{ width: 26, height: 26, borderRadius: 6, background: `${TEAL}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <Utensils size={14} color={TEAL} />
+          <div className="flex gap-2.5 items-start">
+            <div className="w-6 h-6 rounded bg-[#3B6357]/15 flex items-center justify-center shrink-0">
+              <Utensils size={14} className="text-[#3B6357]" />
             </div>
             <div>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: INK }}>Pangan Lokal &amp; Terjangkau</div>
-              <div style={{ fontSize: 11.5, color: "#61594B", lineHeight: 1.4, marginTop: 2 }}>Bahan mudah diperoleh di pasar tradisional terdekat dengan harga ramah bagi keluarga.</div>
+              <div className="text-xs font-bold text-[#1E2B25]">Pangan Lokal &amp; Terjangkau</div>
+              <div className="text-xs text-[#61594B] leading-relaxed mt-0.5">Bahan mudah diperoleh di pasar tradisional terdekat dengan harga ramah bagi keluarga.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        <div style={{ background: "#FFFFFF", border: `1px solid ${LINE}`, borderRadius: 14, padding: "16px 18px", display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: INK }}>Pilihan Menu Alternatif</div>
-          <p style={{ fontSize: 12, color: "#787163", margin: 0 }}>Jika bahan utama tidak tersedia, berikut alternatif menu komplementer yang sebanding:</p>
-          <div style={{ background: "#FAF7F0", border: `1px solid ${LINE}`, borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: INK }}>Ikan Teri Segar + Jeruk Manis</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: TEAL }}>Rp5.500</span>
+      <div className="flex flex-col gap-3.5">
+        <div className="bg-white border border-[#E4DCCB] rounded-2xl p-4 flex flex-col gap-3">
+          <div className="text-sm font-bold text-[#1E2B25]">Pilihan Menu Alternatif</div>
+          <p className="text-xs text-[#787163] m-0">Jika bahan utama tidak tersedia, berikut alternatif menu komplementer yang sebanding:</p>
+          <div className="bg-[#FAF7F0] border border-[#E4DCCB] rounded-xl p-2.5">
+            <div className="flex justify-between items-center text-xs font-bold">
+              <span className="text-[#1E2B25]">Ikan Teri Segar + Jeruk Manis</span>
+              <span className="text-[#3B6357]">Rp5.500</span>
             </div>
-            <div style={{ fontSize: 11, color: "#787163", marginTop: 3 }}>Kalsium dan zat besi hemin dari ikan teri didukung asam askorbat jeruk.</div>
+            <div className="text-[11px] text-[#787163] mt-0.5">Kalsium dan zat besi hemin dari ikan teri didukung asam askorbat jeruk.</div>
           </div>
-          <div style={{ background: "#FAF7F0", border: `1px solid ${LINE}`, borderRadius: 10, padding: "10px 12px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: INK }}>Kacang Hijau + Sayur Bayam</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: TEAL }}>Rp4.000</span>
+          <div className="bg-[#FAF7F0] border border-[#E4DCCB] rounded-xl p-2.5">
+            <div className="flex justify-between items-center text-xs font-bold">
+              <span className="text-[#1E2B25]">Kacang Hijau + Sayur Bayam</span>
+              <span className="text-[#3B6357]">Rp4.000</span>
             </div>
-            <div style={{ fontSize: 11, color: "#787163", marginTop: 3 }}>Kombinasi nabati kaya zat besi dengan serat halus ramah pencernaan anak.</div>
+            <div className="text-[11px] text-[#787163] mt-0.5">Kombinasi nabati kaya zat besi dengan serat halus ramah pencernaan anak.</div>
           </div>
         </div>
 
-        <div style={{ background: "#F5F1E8", border: `1px solid ${LINE}`, borderRadius: 14, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="bg-[#F5F1E8] border border-[#E4DCCB] rounded-2xl p-3.5 flex items-center justify-between">
           <div>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: INK }}>Uji Foto / Balita Lain?</div>
-            <div style={{ fontSize: 11, color: "#807869" }}>Reset alur prototype untuk pengujian baru</div>
+            <div className="text-xs font-bold text-[#1E2B25]">Uji Foto / Balita Lain?</div>
+            <div className="text-[11px] text-[#807869]">Reset alur prototype untuk pengujian baru</div>
           </div>
-          <button type="button" onClick={onReset} className="fita-btn-secondary" style={{ padding: "8px 14px", fontSize: 12 }}>
+          <button
+            type="button"
+            onClick={onReset}
+            className="px-3.5 py-1.5 bg-white border border-[#E4DCCB] rounded-lg text-xs font-semibold text-[#1E2B25] flex items-center gap-1.5 hover:bg-[#FAF7F0] cursor-pointer"
+          >
             <RotateCcw size={13} /> Mulai Ulang
           </button>
         </div>
@@ -861,21 +839,15 @@ function DesktopRecommendationStep({ gap, onReset }) {
 }
 
 // ===========================================================================
-// MAIN COMPONENT DENGAN AUTO-RESPONSIVE MURNI
+// MAIN COMPONENT DENGAN TAILWIND RESPONSIVE (md: BREAKPOINT)
 // ===========================================================================
 export default function FitaAppPrototype() {
   const [step, setStep] = useState(1);
-  const [profile, setProfile] = useState({
-    name: "Nadia",
-    age: "4",
-    weight: "14.5",
-    height: "98",
-    gender: "Perempuan",
-  });
+  const [profile, setProfile] = useState({ name: "", age: "4", weight: "14.5", height: "98", gender: "Perempuan" });
   const [scanned, setScanned] = useState(false);
 
-  // Kalkulasi AKG & Intake
-  const target = AKG_TABLE[ageToBracket(profile.age)];
+  // Perhitungan Target & Asupan
+  const target = AKG_TABLE[ageToBracket(Number(profile.age) || 4)];
   const intake = useMemo(() => {
     const totals = { fe: 0, zn: 0, vitc: 0, protein: 0 };
     MOCK_DETECTIONS.forEach((d) => {
@@ -886,12 +858,7 @@ export default function FitaAppPrototype() {
       totals.vitc += t.vitc * ratio;
       totals.protein += t.protein * ratio;
     });
-    return {
-      fe: +totals.fe.toFixed(1),
-      zn: +totals.zn.toFixed(1),
-      vitc: +totals.vitc.toFixed(1),
-      protein: +totals.protein.toFixed(1),
-    };
+    return { fe: +totals.fe.toFixed(1), zn: +totals.zn.toFixed(1), vitc: +totals.vitc.toFixed(1), protein: +totals.protein.toFixed(1) };
   }, []);
 
   const gap = {
@@ -929,103 +896,92 @@ export default function FitaAppPrototype() {
   return (
     <>
       {/* ================================================================= */}
-      {/* VIEW HP: Aktif otomatis di layar < 768px (Desain Asli Tanpa Border)*/}
+      {/* 1. VIEW HP (< 768px / block md:hidden): 100% Desain Awal Seamless */}
       {/* ================================================================= */}
-      <div className="fita-mobile-view-container">
-        <div className="fita-mobile-app-body">
-          <MobileAppBar title={STEP_TITLES[step - 1]} step={step} totalSteps={5} />
+      <div className="block md:hidden w-full min-h-screen min-h-[100dvh] bg-[#F6F2EA] flex flex-col">
+        <MobileAppBar title={STEP_TITLES[step - 1]} step={step} totalSteps={5} />
 
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto" }}>
-            {step === 1 && <MobileProfileStep profile={profile} setProfile={setProfile} onNext={() => setStep(2)} />}
-            {step === 2 && <MobileScanStep scanned={scanned} setScanned={setScanned} onNext={() => setStep(3)} />}
-            {step === 3 && <MobileDetectionStep onNext={() => setStep(4)} />}
-            {step === 4 && <MobileNutritionStep profile={profile} gap={gap} intake={intake} target={target} onNext={() => setStep(5)} />}
-            {step === 5 && <MobileRecommendationStep gap={gap} onReset={handleReset} />}
-          </div>
-
-          {step > 1 && (
-            <div style={{ padding: "0 18px 8px", display: "flex" }}>
-              <button
-                type="button"
-                onClick={handleBack}
-                style={{
-                  display: "flex", alignItems: "center", gap: 4, background: "none",
-                  border: "none", color: "#8A8272", fontSize: 12, cursor: "pointer", padding: "6px 0",
-                }}
-              >
-                <ChevronLeft size={14} /> Kembali
-              </button>
-            </div>
-          )}
-
-          <MobileBottomNav setStep={setStep} />
+        <div className="flex-1 flex flex-col overflow-y-auto">
+          {step === 1 && <MobileProfileStep profile={profile} setProfile={setProfile} onNext={() => setStep(2)} />}
+          {step === 2 && <MobileScanStep scanned={scanned} setScanned={setScanned} onNext={() => setStep(3)} />}
+          {step === 3 && <MobileDetectionStep onNext={() => setStep(4)} />}
+          {step === 4 && <MobileNutritionStep profile={profile} gap={gap} intake={intake} target={target} onNext={() => setStep(5)} />}
+          {step === 5 && <MobileRecommendationStep gap={gap} />}
         </div>
+
+        {step > 1 && (
+          <div className="px-4 py-2 flex">
+            <button
+              type="button"
+              onClick={() => setStep(step - 1)}
+              className="flex items-center gap-1 bg-transparent border-none text-[#8A8272] text-xs cursor-pointer py-1"
+            >
+              <ChevronLeft size={14} /> Kembali
+            </button>
+          </div>
+        )}
+
+        <MobileBottomNav />
       </div>
 
       {/* ================================================================= */}
-      {/* VIEW PC: Aktif otomatis di layar >= 768px (Web Dashboard 2-Kolom)  */}
+      {/* 2. VIEW PC (>= 768px / hidden md:flex): Web Dashboard 2-Kolom    */}
       {/* ================================================================= */}
-      <div className="fita-desktop-view-container">
+      <div className="hidden md:flex flex-col min-h-screen w-full bg-[#F5EFE4]">
         {/* Header Desktop */}
-        <header className="fita-desktop-header">
-          <div className="fita-desktop-header-inner">
-            <div className="fita-brand">
-              <div className="fita-brand-logo">
+        <header className="bg-white border-b border-[#E4DCCB] shadow-sm sticky top-0 z-30">
+          <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#3B6357] to-[#234037] flex items-center justify-center text-white shadow-md">
                 <Sparkles size={18} />
               </div>
               <div>
-                <div className="fita-brand-title">FITA</div>
-                <div className="fita-brand-subtitle">
+                <div className="text-xl font-extrabold text-[#1E2B25] leading-tight">FITA</div>
+                <div className="text-xs text-[#787163]">
                   Sistem Deteksi &amp; Rekomendasi Pangan Gizi Anak
                 </div>
               </div>
             </div>
 
-            <span className="fita-badge fita-badge-teal">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EEF4F1] text-[#3B6357] border border-[#3B6357]/15">
               <BookOpen size={13} /> Permenkes RI No. 28/2019
             </span>
           </div>
         </header>
 
-        {/* Dashboard Container 2-Kolom */}
-        <div className="fita-dashboard-container">
+        {/* Dashboard 2-Kolom */}
+        <div className="max-w-7xl w-full mx-auto p-7 grid grid-cols-[320px_1fr] lg:grid-cols-[340px_1fr] gap-7 items-start flex-1">
           {/* Kolom Kiri: Sidebar Info & Stepper */}
-          <aside className="fita-desktop-sidebar">
-            <div className="fita-sidebar-card">
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{
-                  width: 38, height: 38, borderRadius: "50%", background: "#EEF4F1",
-                  display: "flex", alignItems: "center", justifyContent: "center", color: TEAL,
-                }}>
-                  <User size={19} />
+          <aside className="flex flex-col gap-4 sticky top-20">
+            <div className="bg-white rounded-2xl border border-[#E4DCCB] shadow-sm p-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-full bg-[#EEF4F1] flex items-center justify-center text-[#3B6357]">
+                  <User size={20} />
                 </div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: INK }}>
+                  <div className="text-sm font-bold text-[#1E2B25]">
                     {profile.name || "Nama Balita"}
                   </div>
-                  <div style={{ fontSize: 11.5, color: "#807869" }}>
+                  <div className="text-xs text-[#807869]">
                     {profile.age} Th &middot; {profile.gender}
                   </div>
                 </div>
               </div>
 
-              <div style={{
-                display: "flex", gap: 8, marginTop: 12, paddingTop: 10,
-                borderTop: `1px solid ${LINE}`, fontSize: 11.5, color: "#787163",
-              }}>
+              <div className="flex gap-2 mt-3 pt-2.5 border-t border-[#E4DCCB] text-xs text-[#787163]">
                 <div>BB: <strong>{profile.weight || "-"} kg</strong></div>
                 <div>&middot;</div>
                 <div>TB: <strong>{profile.height || "-"} cm</strong></div>
                 <div>&middot;</div>
-                <div style={{ color: TEAL, fontWeight: 600 }}>{ageToBracket(profile.age)}</div>
+                <div className="text-[#3B6357] font-semibold">{ageToBracket(Number(profile.age) || 4)}</div>
               </div>
             </div>
 
-            <div className="fita-sidebar-card">
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#7A7263", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            <div className="bg-white rounded-2xl border border-[#E4DCCB] shadow-sm p-4">
+              <div className="text-xs font-bold text-[#7A7263] uppercase tracking-wider">
                 Tahapan Analisis
               </div>
-              <div className="fita-stepper-list">
+              <div className="flex flex-col gap-1.5 mt-3">
                 {STEPS_DATA.map((s) => {
                   const isActive = step === s.id;
                   const isCompleted = step > s.id;
@@ -1038,14 +994,26 @@ export default function FitaAppPrototype() {
                           setStep(s.id);
                         }
                       }}
-                      className={`fita-step-item ${isActive ? "active" : ""} ${isCompleted ? "completed" : ""}`}
+                      className={`flex items-center gap-3 p-2.5 rounded-lg transition-all text-left cursor-pointer ${
+                        isActive
+                          ? "bg-[#EEF4F1] border border-[#3B6357]/25"
+                          : "hover:bg-[#FAF7F0] border border-transparent"
+                      }`}
                     >
-                      <div className="fita-step-num">
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                        isCompleted
+                          ? "bg-[#3F7A57] text-white"
+                          : isActive
+                          ? "bg-[#3B6357] text-white shadow"
+                          : "bg-[#EAE4D7] text-[#787163]"
+                      }`}>
                         {isCompleted ? <Check size={14} /> : s.id}
                       </div>
                       <div>
-                        <div className="fita-step-text-title">{s.title}</div>
-                        <div className="fita-step-text-sub">{s.subtitle}</div>
+                        <div className={`text-xs font-semibold ${isActive ? "text-[#3B6357] font-bold" : "text-[#1E2B25]"}`}>
+                          {s.title}
+                        </div>
+                        <div className="text-[11px] text-[#787163]">{s.subtitle}</div>
                       </div>
                     </button>
                   );
@@ -1053,44 +1021,42 @@ export default function FitaAppPrototype() {
               </div>
             </div>
 
-            <div className="fita-sidebar-card" style={{ background: "#FAF7F0", fontSize: 12, color: "#70695B", lineHeight: 1.5 }}>
-              <div style={{ fontWeight: 700, color: INK, marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
-                <Info size={14} color={TEAL} /> Acuan Metodologi
+            <div className="bg-[#FAF7F0] rounded-2xl border border-[#E4DCCB] p-4 text-xs text-[#70695B] leading-relaxed">
+              <div className="font-bold text-[#1E2B25] mb-1 flex items-center gap-1.5">
+                <Info size={14} className="text-[#3B6357]" /> Acuan Metodologi
               </div>
               Sistem mengombinasikan deteksi lauk berbasis vision untuk estimasi porsi (gram) dan model optimasi non-linear untuk merekomendasikan pangan komplementer bersinergi.
             </div>
           </aside>
 
           {/* Kolom Kanan: Main Workspace Card */}
-          <main className="fita-desktop-workspace">
-            <div className="fita-workspace-header">
+          <main className="bg-white rounded-3xl border border-[#E4DCCB] shadow-sm overflow-hidden flex flex-col min-h-[580px]">
+            <div className="px-7 py-5 border-b border-[#E4DCCB] bg-[#FCFAF6] flex items-center justify-between">
               <div>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: TEAL, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <div className="text-xs font-bold text-[#3B6357] uppercase tracking-wider">
                   Langkah {step} dari 5
                 </div>
-                <h1 style={{ fontSize: 20, fontWeight: 800, color: INK, margin: "3px 0 0" }}>
+                <h1 className="text-xl font-extrabold text-[#1E2B25] m-0 mt-0.5">
                   {currentStepInfo.title}
                 </h1>
-                <div style={{ fontSize: 13, color: "#7A7263", marginTop: 2 }}>
+                <div className="text-xs text-[#7A7263] mt-0.5">
                   {currentStepInfo.subtitle}
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: 6 }}>
+              <div className="flex gap-1.5">
                 {STEPS_DATA.map((s) => (
                   <div
                     key={s.id}
-                    style={{
-                      width: step === s.id ? 24 : 8, height: 8, borderRadius: 4,
-                      background: step === s.id ? ACCENT : step > s.id ? TEAL : LINE,
-                      transition: "all 0.3s ease",
-                    }}
+                    className={`h-2 rounded transition-all ${
+                      step === s.id ? "w-6 bg-[#C97B2E]" : step > s.id ? "w-2 bg-[#3B6357]" : "w-2 bg-[#E4DCCB]"
+                    }`}
                   />
                 ))}
               </div>
             </div>
 
-            <div className="fita-workspace-body">
+            <div className="p-7 flex-1 flex flex-col">
               {step === 1 && <DesktopProfileStep profile={profile} setProfile={setProfile} />}
               {step === 2 && <DesktopScanStep scanned={scanned} setScanned={setScanned} />}
               {step === 3 && <DesktopDetectionStep />}
@@ -1098,9 +1064,13 @@ export default function FitaAppPrototype() {
               {step === 5 && <DesktopRecommendationStep gap={gap} onReset={handleReset} />}
             </div>
 
-            <div className="fita-workspace-footer">
+            <div className="px-7 py-4 border-t border-[#E4DCCB] bg-[#FCFAF6] flex items-center justify-between">
               {step > 1 ? (
-                <button type="button" onClick={handleBack} className="fita-btn-ghost">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#787163] hover:text-[#1E2B25] hover:bg-black/5 rounded-lg transition-all cursor-pointer"
+                >
                   <ChevronLeft size={16} /> Kembali
                 </button>
               ) : (
@@ -1111,7 +1081,11 @@ export default function FitaAppPrototype() {
                 type="button"
                 onClick={nextButtonConfig.onClick || handleNext}
                 disabled={nextButtonConfig.disabled}
-                className="fita-btn-primary"
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all ${
+                  nextButtonConfig.disabled
+                    ? "bg-[#D8D0C0] cursor-not-allowed"
+                    : "bg-[#C97B2E] hover:bg-[#B56C23] cursor-pointer shadow-md hover:-translate-y-0.5"
+                }`}
               >
                 {nextButtonConfig.label}
                 {nextButtonConfig.icon && <nextButtonConfig.icon size={16} />}
