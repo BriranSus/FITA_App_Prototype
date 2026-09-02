@@ -152,7 +152,11 @@ function PlateIllustration({ showBoxes = false, detections = [] }) {
 // ===========================================================================
 function MobileAppBar({ title, step, totalSteps }) {
   return (
-    <div style={{ padding: "16px 18px 12px", borderBottom: `1px solid ${LINE}`, background: "#fff", position: "sticky", top: 0, zIndex: 20 }}>
+    <div style={{
+      padding: "calc(16px + env(safe-area-inset-top)) 18px 12px",
+      borderBottom: `1px solid ${LINE}`, background: "#fff",
+      position: "sticky", top: 0, zIndex: 20,
+    }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <div style={{ width: 26, height: 26, borderRadius: 6, background: TEAL, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Sparkles size={14} color="#fff" />
@@ -178,7 +182,8 @@ function MobilePrimaryButton({ children, onClick, disabled, icon: Icon }) {
       style={{
         width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
         background: disabled ? "#D8D0C0" : ACCENT, color: "#fff", border: "none",
-        padding: "13px 16px", borderRadius: 8, fontSize: 14.5, fontWeight: 600,
+        padding: "14px 16px", minHeight: 48, borderRadius: 8, fontSize: 15, fontWeight: 600,
+        fontFamily: "inherit", touchAction: "manipulation",
         cursor: disabled ? "not-allowed" : "pointer",
       }}
     >
@@ -189,10 +194,11 @@ function MobilePrimaryButton({ children, onClick, disabled, icon: Icon }) {
 
 function MobileSecondaryButton({ icon: Icon, label, onClick }) {
   return (
-    <button onClick={onClick} style={{
+    <button type="button" onClick={onClick} style={{
       flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-      padding: "11px 0", borderRadius: 8, border: `1px solid ${LINE}`, background: "#fff",
-      fontSize: 13, color: INK, cursor: "pointer",
+      padding: "12px 0", minHeight: 46, borderRadius: 8, border: `1px solid ${LINE}`, background: "#fff",
+      fontSize: 13.5, color: INK, cursor: "pointer",
+      fontFamily: "inherit", touchAction: "manipulation",
     }}>
       <Icon size={15} /> {label}
     </button>
@@ -211,15 +217,19 @@ function MobileField({ label, value, onChange, placeholder, type = "text" }) {
   return (
     <label style={{ flex: 1, display: "block" }}>
       <div style={{ fontSize: 11.5, color: "#8A8272", marginBottom: 4 }}>{label}</div>
+      {/* inputMode: keypad angka langsung muncul di HP untuk umur/berat/tinggi */}
       <input
         type={type}
         value={value}
         placeholder={placeholder}
+        inputMode={type === "number" ? "decimal" : undefined}
         onChange={(e) => onChange(e.target.value)}
         style={{
-          width: "100%", boxSizing: "border-box", padding: "10px 11px", borderRadius: 7,
-          border: `1px solid ${LINE}`, fontSize: 14, outline: "none", color: INK,
-          background: "#fff",
+          width: "100%", boxSizing: "border-box", padding: "12px 11px", borderRadius: 7,
+          border: `1px solid ${LINE}`, outline: "none", color: INK,
+          background: "#fff", fontFamily: "inherit",
+          /* 16px wajib: di bawah itu Safari iOS auto-zoom saat field difokus */
+          fontSize: 16,
         }}
       />
     </label>
@@ -247,10 +257,11 @@ function MobileProfileStep({ profile, setProfile, onNext }) {
             type="button"
             onClick={() => setProfile({ ...profile, gender: g })}
             style={{
-              flex: 1, padding: "9px 0", borderRadius: 7, fontSize: 13,
+              flex: 1, padding: "12px 0", minHeight: 46, borderRadius: 7, fontSize: 13.5,
               border: profile.gender === g ? `2px solid ${TEAL}` : `1px solid ${LINE}`,
               background: profile.gender === g ? "#EAF1EC" : "#fff",
               color: INK, cursor: "pointer", fontWeight: profile.gender === g ? 600 : 400,
+              fontFamily: "inherit", touchAction: "manipulation",
             }}
           >
             {g}
@@ -367,8 +378,9 @@ function MobileNutritionStep({ profile, onNext, gap, intake, target }) {
   );
 }
 
-function MobileRecommendationStep({ gap }) {
+function MobileRecommendationStep({ gap, onReset }) {
   const rec = useMemo(() => bestCombo(gap), [gap]);
+  const [saved, setSaved] = useState(false);
   if (!rec) return <div style={{ padding: 18 }}>Tidak ada rekomendasi dalam batasan.</div>;
   const names = rec.ids.map((id) => FOODS.find((f) => f.id === id).name);
   return (
@@ -392,7 +404,25 @@ function MobileRecommendationStep({ gap }) {
         <div style={{ fontSize: 12, color: "#8A8272" }}>Kacang hijau + Bayam &middot; Rp4.000</div>
       </MobileCard>
       <div style={{ flex: 1, minHeight: 20 }} />
-      <MobilePrimaryButton onClick={() => {}} icon={ArrowRight}>Simpan ke riwayat</MobilePrimaryButton>
+      <MobilePrimaryButton
+        onClick={() => setSaved(true)}
+        disabled={saved}
+        icon={saved ? Check : ArrowRight}
+      >
+        {saved ? "Tersimpan di riwayat" : "Simpan ke riwayat"}
+      </MobilePrimaryButton>
+      <button
+        type="button"
+        onClick={onReset}
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+          background: "transparent", border: "none", padding: "10px 0", minHeight: 44,
+          fontSize: 12.5, color: "#8A8272", cursor: "pointer",
+          fontFamily: "inherit", touchAction: "manipulation",
+        }}
+      >
+        <RotateCcw size={13} /> Mulai ulang untuk anak lain
+      </button>
     </div>
   );
 }
@@ -414,11 +444,23 @@ function MobileBottomNav() {
     { icon: User, label: "Profil" },
   ];
   return (
-    <div style={{ display: "flex", borderTop: `1px solid ${LINE}`, background: "#fff", padding: "8px 0 10px", position: "sticky", bottom: 0, zIndex: 20 }}>
+    <div style={{
+      display: "flex", borderTop: `1px solid ${LINE}`, background: "#fff",
+      /* Ruang aman untuk home-indicator iPhone / gesture bar Android */
+      padding: "8px 0 calc(10px + env(safe-area-inset-bottom))",
+      position: "sticky", bottom: 0, zIndex: 20,
+    }}>
       {items.map((it) => (
-        <div key={it.label} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, color: it.active ? ACCENT : "#B0A891" }}>
-          <it.icon size={18} />
-          <span style={{ fontSize: 9.5 }}>{it.label}</span>
+        <div
+          key={it.label}
+          style={{
+            flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
+            justifyContent: "center", gap: 3, minHeight: 44,
+            color: it.active ? ACCENT : "#B0A891",
+          }}
+        >
+          <it.icon size={19} />
+          <span style={{ fontSize: 10 }}>{it.label}</span>
         </div>
       ))}
     </div>
@@ -896,38 +938,43 @@ export default function FitaAppPrototype() {
   return (
     <>
       {/* ================================================================= */}
-      {/* 1. VIEW HP (< 768px / block md:hidden): 100% Desain Awal Seamless */}
+      {/* 1. VIEW HP (< 1024px): aplikasi mobile, seamless tanpa border      */}
+      {/* Dashboard PC butuh >= 1024px (sidebar 320px + workspace 2 kolom),  */}
+      {/* jadi tablet portrait pun diarahkan ke tampilan aplikasi ini.       */}
       {/* ================================================================= */}
-      <div className="block md:hidden w-full min-h-screen min-h-[100dvh] bg-[#F6F2EA] flex flex-col">
-        <MobileAppBar title={STEP_TITLES[step - 1]} step={step} totalSteps={5} />
+      <div className="flex lg:hidden w-full min-h-screen min-h-[100dvh] bg-[#EBE4D6] justify-center">
+        {/* Di layar lebar-tanggung, shell dikunci selebar HP dan ditengahkan */}
+        <div className="w-full max-w-[480px] bg-[#F6F2EA] flex flex-col min-h-screen min-h-[100dvh] sm:border-x sm:border-[#E4DCCB]">
+          <MobileAppBar title={STEP_TITLES[step - 1]} step={step} totalSteps={5} />
 
-        <div className="flex-1 flex flex-col overflow-y-auto">
-          {step === 1 && <MobileProfileStep profile={profile} setProfile={setProfile} onNext={() => setStep(2)} />}
-          {step === 2 && <MobileScanStep scanned={scanned} setScanned={setScanned} onNext={() => setStep(3)} />}
-          {step === 3 && <MobileDetectionStep onNext={() => setStep(4)} />}
-          {step === 4 && <MobileNutritionStep profile={profile} gap={gap} intake={intake} target={target} onNext={() => setStep(5)} />}
-          {step === 5 && <MobileRecommendationStep gap={gap} />}
-        </div>
-
-        {step > 1 && (
-          <div className="px-4 py-2 flex">
-            <button
-              type="button"
-              onClick={() => setStep(step - 1)}
-              className="flex items-center gap-1 bg-transparent border-none text-[#8A8272] text-xs cursor-pointer py-1"
-            >
-              <ChevronLeft size={14} /> Kembali
-            </button>
+          <div className="flex-1 flex flex-col">
+            {step === 1 && <MobileProfileStep profile={profile} setProfile={setProfile} onNext={() => setStep(2)} />}
+            {step === 2 && <MobileScanStep scanned={scanned} setScanned={setScanned} onNext={() => setStep(3)} />}
+            {step === 3 && <MobileDetectionStep onNext={() => setStep(4)} />}
+            {step === 4 && <MobileNutritionStep profile={profile} gap={gap} intake={intake} target={target} onNext={() => setStep(5)} />}
+            {step === 5 && <MobileRecommendationStep gap={gap} onReset={handleReset} />}
           </div>
-        )}
 
-        <MobileBottomNav />
+          {step > 1 && (
+            <div className="px-4 pb-1 flex">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="flex items-center gap-1 bg-transparent border-none text-[#8A8272] text-xs cursor-pointer px-1 py-2.5 min-h-[44px] touch-manipulation"
+              >
+                <ChevronLeft size={14} /> Kembali
+              </button>
+            </div>
+          )}
+
+          <MobileBottomNav />
+        </div>
       </div>
 
       {/* ================================================================= */}
-      {/* 2. VIEW PC (>= 768px / hidden md:flex): Web Dashboard 2-Kolom    */}
+      {/* 2. VIEW PC (>= 1024px / hidden lg:flex): Web Dashboard 2-Kolom   */}
       {/* ================================================================= */}
-      <div className="hidden md:flex flex-col min-h-screen w-full bg-[#F5EFE4]">
+      <div className="hidden lg:flex flex-col min-h-screen w-full bg-[#F5EFE4]">
         {/* Header Desktop */}
         <header className="bg-white border-b border-[#E4DCCB] shadow-sm sticky top-0 z-30">
           <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center justify-between">
@@ -950,7 +997,7 @@ export default function FitaAppPrototype() {
         </header>
 
         {/* Dashboard 2-Kolom */}
-        <div className="max-w-7xl w-full mx-auto p-7 grid grid-cols-[320px_1fr] lg:grid-cols-[340px_1fr] gap-7 items-start flex-1">
+        <div className="max-w-7xl w-full mx-auto p-7 grid grid-cols-[320px_1fr] xl:grid-cols-[340px_1fr] gap-7 items-start flex-1">
           {/* Kolom Kiri: Sidebar Info & Stepper */}
           <aside className="flex flex-col gap-4 sticky top-20">
             <div className="bg-white rounded-2xl border border-[#E4DCCB] shadow-sm p-4">
