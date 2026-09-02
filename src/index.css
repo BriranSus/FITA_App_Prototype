@@ -1,0 +1,74 @@
+:root {
+  --color-ink: #1E2B25;
+  --color-teal: #3B6357;
+  --color-teal-hover: #2F5046;
+  --color-teal-light: #EEF4F1;
+  --color-accent: #C97B2E;
+  --color-accent-hover: #B56C23;
+  --color-accent-light: #FAF3E8;
+  --color-paper: #FFFFFF;
+  --color-card: #FFFFFF;
+  --color-surface: #F9F6F0;
+  --color-danger: #A34A3E;
+  --color-danger-light: #FDF1EF;
+  --color-ok: #3F7A57;
+  --color-ok-light: #EEF6F1;
+  --color-line: #E5DFC0;
+  --color-line-subtle: #ECE7DD;
+  --color-subtle: #7F7767;
+  --color-bg-page: #F5EFE4;
+  --font-main: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --shadow-subtle: 0 2px 8px rgba(30, 43, 37, 0.04);
+  --shadow-card: 0 4px 20px rgba(30, 43, 37, 0.06);
+  --shadow-elevated: 0 12px 36px rgba(30, 43, 37, 0.10);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-main);
+  background-color: var(--color-bg-page);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D5CEBE;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8B09F;
+}
+
+input, button, select, textarea {
+  font-family: inherit;
+}
